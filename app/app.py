@@ -7,17 +7,28 @@ import os
 import io
 from flask import Flask, request, redirect, url_for, render_template, send_from_directory
 from werkzeug.utils import secure_filename
+import requests
+import os.path
+from os import path
 
 f = open("vocab_itos.pkl", "rb")
-vocab = pickle.lheroad(f)
+vocab = pickle.load(f)
 
 embed_size = 256
 hidden_size = 256
 vocab_size = len(vocab)
 num_layers = 1
+MODEL_URL = "https://vonage-models.s3.amazonaws.com/image-caption.tar"
+
+if not path.exists('image-caption.tar'):
+    print("downloading model....")
+    r = requests.get(MODEL_URL)
+    open('image-caption.tar', 'wb').write(r.content)
+
+print('done!\nloading up the saved model weights...')
 
 myModel = CNNtoRNN(embed_size, hidden_size, vocab_size, num_layers).to("cpu")
-myModel.load_state_dict(torch.load('model.tar', map_location=torch.device('cpu'))['state_dict'])
+myModel.load_state_dict(torch.load('image-caption.tar', map_location=torch.device('cpu'))['state_dict'])
 myModel.eval()
 
 app = Flask(__name__)
