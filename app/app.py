@@ -57,7 +57,7 @@ def get_caption(img_path):
     caption = " ".join(myModel.caption_image(image.to("cpu"), vocab))
     return caption
 
-@app.route('/', methods=['GET', 'POST'])
+@myapp.route('/', methods=['GET', 'POST'])
 def index():
    if request.method == 'POST':
        if 'file' not in request.files:
@@ -77,11 +77,11 @@ def index():
                 
    return render_template('index.html')
 
-@app.route('/test')
+@myapp.route('/test')
 def test():
     return render_template('test.html')
 
-@app.route('/uploads/<filename>')
+@myapp.route('/uploads/<filename>')
 def upload(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
@@ -90,4 +90,4 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
         
 if __name__ == "__main__":
-   app.run()
+    myapp.run(host='0.0.0.0')
