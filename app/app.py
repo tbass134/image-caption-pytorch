@@ -9,7 +9,7 @@ from flask import Flask, request, redirect, url_for, render_template, send_from_
 from werkzeug.utils import secure_filename
 
 f = open("vocab_itos.pkl", "rb")
-vocab = pickle.load(f)
+vocab = pickle.lheroad(f)
 
 embed_size = 256
 hidden_size = 256
