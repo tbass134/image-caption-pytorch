@@ -31,13 +31,13 @@ myModel = CNNtoRNN(embed_size, hidden_size, vocab_size, num_layers).to("cpu")
 myModel.load_state_dict(torch.load('image-caption.tar', map_location=torch.device('cpu'))['state_dict'])
 myModel.eval()
 
-myapp = Flask(__name__)
+app = Flask(__name__)
 
 UPLOAD_FOLDER = os.path.dirname(os.path.abspath(__file__)) + '/uploads/'
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
-myapp.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -57,7 +57,7 @@ def get_caption(img_path):
     caption = " ".join(myModel.caption_image(image.to("cpu"), vocab))
     return caption
 
-@myapp.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def index():
    if request.method == 'POST':
        if 'file' not in request.files:
@@ -77,11 +77,11 @@ def index():
                 
    return render_template('index.html')
 
-@myapp.route('/test')
+@app.route('/test')
 def test():
     return render_template('test.html')
 
-@myapp.route('/uploads/<filename>')
+@app.route('/uploads/<filename>')
 def upload(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
@@ -90,4 +90,4 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
         
 if __name__ == "__main__":
-    myapp.run(host='0.0.0.0')
+    app.run(host='0.0.0.0')
