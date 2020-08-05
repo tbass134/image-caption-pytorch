@@ -29,7 +29,7 @@ def train():
     torch.backends.cudnn.benchmark = True
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     load_model = False
-    save_model = False
+    save_model = True
     train_CNN = False
 
     # Hyperparameters
@@ -41,7 +41,7 @@ def train():
     num_epochs = 100
 
     # for tensorboard
-    writer = SummaryWriter("runs/flickr_org")
+    writer = SummaryWriter("runs/flickr")
     step = 0
 
     # initialize model, loss etc
