@@ -31,13 +31,13 @@ myModel = CNNtoRNN(embed_size, hidden_size, vocab_size, num_layers).to("cpu")
 myModel.load_state_dict(torch.load('image-caption.tar', map_location=torch.device('cpu'))['state_dict'])
 myModel.eval()
 
-app = Flask(__name__)
+myapp = Flask(__name__)
 
 UPLOAD_FOLDER = os.path.dirname(os.path.abspath(__file__)) + '/uploads/'
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+myapp.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
     return '.' in filename and \
