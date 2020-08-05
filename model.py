@@ -46,7 +46,7 @@ class CNNtoRNN(nn.Module):
         outputs = self.decoderRNN(features, captions)
         return outputs
 
-    def caption_image(self, image, vocabulary, max_length=50):
+    def caption_image(self, image, vocab, max_length=50):
         result_caption = []
 
         with torch.no_grad():
@@ -60,7 +60,7 @@ class CNNtoRNN(nn.Module):
                 result_caption.append(predicted.item())
                 x = self.decoderRNN.embed(predicted).unsqueeze(0)
 
-                if vocabulary.itos[predicted.item()] == "<EOS>":
+                if vocab[predicted.item()] == "<EOS>":
                     break
 
-        return [vocabulary.itos[idx] for idx in result_caption]
+        return [vocab[idx] for idx in result_caption]
