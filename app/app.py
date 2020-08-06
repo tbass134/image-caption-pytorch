@@ -18,17 +18,18 @@ embed_size = 256
 hidden_size = 256
 vocab_size = len(vocab)
 num_layers = 1
-MODEL_URL = "https://vonage-models.s3.amazonaws.com/image-caption.tar"
+MODEL_PATH = os.getenv('MODEL_PATH')  #"my_checkpoint.pth.tar"
+MODEL_URL =  os.getenv('MODEL_URL') #"https://vonage-models.s3.amazonaws.com/my_checkpoint.pth.tar"
 
-if not path.exists('image-caption.tar'):
+if not path.exists(MODEL_PATH):
     print("downloading model....")
     r = requests.get(MODEL_URL)
-    open('image-caption.tar', 'wb').write(r.content)
+    open(MODEL_PATH, 'wb').write(r.content)
 
 print('done!\nloading up the saved model weights...')
 
 myModel = CNNtoRNN(embed_size, hidden_size, vocab_size, num_layers).to("cpu")
-myModel.load_state_dict(torch.load('image-caption.tar', map_location=torch.device('cpu'))['state_dict'])
+myModel.load_state_dict(torch.load(MODEL_PATH, map_location=torch.device('cpu'))['state_dict'])
 myModel.eval()
 
 app = Flask(__name__)
